@@ -6,7 +6,7 @@
 <meta name="description" content="Daily map game: draw five NSW rivers from memory and see how far off you were.">
 
 <style>*,*::before,*::after{box-sizing:border-box}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
-<title>Where’s That River?</title>
+<title>Where’s That River? Water Week</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&display=swap">
 <style>
@@ -39,6 +39,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-siz
 .wrap{max-width:720px;margin:0 auto;padding-inline:16px;padding-block:14px 28px;display:flex;flex-direction:column;gap:12px}
 header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1.5px solid var(--ink);padding-bottom:6px}
 .brand{font-family:var(--f-label);font-weight:600;font-size:1.3rem;}
+.brand .eyebrow{display:block;font-size:.85rem;font-weight:500;color:var(--water)}
 .brand em{font-style:normal;font-family:var(--f-water);font-weight:600;color:var(--water)}
 .sheet{font-family:var(--f-label);font-weight:500;font-size:.9rem;color:var(--muted);display:flex;gap:14px;align-items:center}
 .dots{display:flex;gap:5px}
@@ -75,6 +76,7 @@ button:focus-visible{outline:2px solid var(--water);outline-offset:2px}
 .helpbtn{font-family:var(--f-label);font-weight:700;font-size:.95rem;width:26px;height:26px;padding:0;border-radius:50%;background:transparent;color:var(--ink);border:1.5px solid var(--ink);line-height:1;}
 .overlay{position:fixed;inset:0;z-index:10;display:grid;place-items:center;padding:16px;background:color-mix(in srgb,var(--ink) 45%,transparent)}
 .modal{background:var(--paper);color:var(--ink);border:1.5px solid var(--ink);width:min(440px,100%);max-height:100%;overflow:auto;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 18px 50px -20px rgba(0,0,0,.5)}
+.modal h2 .eyebrow{display:block;font-size:.85rem;font-weight:500;color:var(--water);margin-bottom:2px}
 .modal h2{margin:0;font-family:var(--f-water);font-weight:600;font-size:1.4rem;color:var(--ink);line-height:1.1}
 .demo{border:1.5px solid var(--ink);background:var(--sea);aspect-ratio:4/3;width:100%}
 .demo svg{display:block;width:100%;height:100%}
@@ -99,17 +101,17 @@ footer{font-size:.78rem;color:var(--muted);border-top:1px solid var(--rule);padd
 
 <div class="wrap">
   <header>
-    <div class="brand">Where’s that <em>river</em>?</div>
+    <div class="brand"><span class="eyebrow">Water Week</span>Where’s that <em>river</em>?</div>
     <div class="sheet"><span id="sheetNo">Day 1</span><div class="dots" id="dots" aria-label="Round progress"></div><button class="helpbtn" id="helpBtn" type="button" aria-label="How to play">?</button></div>
   </header>
   <div class="daily">Five new rivers every day.</div>
 
   <div class="prompt" id="promptBox">
     <div>
-      <div class="q" id="qLabel">Draw the course of</div>
+      <div class="q" id="qLabel">Draw the</div>
       <h1 id="riverName">…</h1>
     </div>
-    <div class="hint" id="hint">Draw it in one go, from either end. Let go to see the real river.</div>
+    <div class="hint" id="hint">Click and drag to guess the shape of the river.</div>
   </div>
 
   <div class="map"><svg id="map" role="img" aria-label="Unlabelled map of New South Wales for drawing a river course"></svg></div>
@@ -131,7 +133,7 @@ footer{font-size:.78rem;color:var(--muted);border-top:1px solid var(--rule);padd
   <div id="summaryBox" class="summary" hidden>
     <div class="rows" id="rows"></div>
     <div class="typ"><span class="km" id="typKm">0<small>km</small></span><span class="km-cap">your average today</span></div>
-    <div class="hint">Share your result if you like.</div>
+    <div class="hint">Share your scores.</div>
     <div class="actions">
       <button id="copyBtn" type="button">Copy result</button>
       <span class="toast" id="toast"></span>
@@ -144,7 +146,7 @@ footer{font-size:.78rem;color:var(--muted);border-top:1px solid var(--rule);padd
 
 <div class="overlay" id="howto" hidden role="dialog" aria-modal="true" aria-labelledby="howtoTitle">
   <div class="modal">
-    <h2 id="howtoTitle">How to play</h2>
+    <h2 id="howtoTitle"><span class="eyebrow">Water Week</span>Where’s that river?</h2>
     <div class="demo" aria-hidden="true">
       <svg viewBox="0 0 400 300">
         <path d="M0 0H312C300 40 318 70 300 100C285 130 296 165 276 200C262 230 268 262 252 300H0Z" fill="var(--land)" stroke="var(--border)" stroke-width="2"/>
@@ -159,9 +161,8 @@ footer{font-size:.78rem;color:var(--muted);border-top:1px solid var(--rule);padd
       </svg>
     </div>
     <ol class="steps">
-      <li>Draw the river named at the top.</li>
-      <li>Use one line. You can start from either end.</li>
-      <li>Let go to see how close you were. The lower your score, the better.</li>
+      <li>Click and drag to guess the shape of the river.</li>
+      <li>Share your scores.</li>
     </ol>
     <div class="actions"><button id="howtoClose" type="button">Play</button></div>
   </div>
@@ -278,9 +279,9 @@ function showRound(){
   $('sheetNo').textContent = practice ? 'Practice' : 'Day '+dayNo;
   if(cur>=5){ return showSummary(); }
   const r=rounds[cur];
-  $('qLabel').textContent='Draw the course of';
-  $('riverName').textContent=INFO[r.name][0].replace(/^the /,'The ');
-  $('hint').textContent='Draw it in one go, from either end. Let go to see the real river.';
+  $('qLabel').textContent='Draw the';
+  $('riverName').textContent=INFO[r.name][0].replace(/^the /,'');
+  $('hint').textContent='Click and drag to guess the shape of the river.';
   $('resultBox').hidden=true; $('summaryBox').hidden=true; $('promptBox').hidden=false;
   gRiver.innerHTML=''; gUser.innerHTML=''; locked=false; svg.classList.remove('locked');
 }
